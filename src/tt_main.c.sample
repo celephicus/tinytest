@@ -1,0 +1,21 @@
+#include "tinytest.h"		/* Includes tinytest_local.h
+
+void testAssertEqOk() { 
+	TT_ASSERT_INT(1234, 1234); 
+	TT_ASSERT_INT_HEX(1234, 1234); 
+	TT_ASSERT_STR("zzz", "zzz");
+}
+void testAssertIntFail() { 
+	TT_ASSERT_INT(1234, 0); 
+}
+
+/* You must declare this function that contains your tests. */
+void runTests(void) {
+	TT_TEST_SIMPLE(testAssertEqOk);
+	TT_TEST_SIMPLE(testAssertIntFail);
+}
+
+int main(int argc, char* argv[]) {	
+	return tt_main(argc, argv);
+}
+
