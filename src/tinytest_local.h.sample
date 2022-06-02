@@ -29,6 +29,7 @@
 		The only format specifiers used are `%s' and whatever you have defined for TT_FMT_INT, TT_FMT_HEX, TT_FMT_PSTR. 
 		If the macro TT_VPRINTF(fmt, args) is defined then it is used, else tinytest uses its minimal vprintf. 
 		Note that the format string is of type `tt_pgm_str_t', so this must be set correctly. 
+		The macro `TT_VPRINTF_PSTR' is used to compile a special format character `P' for tinytest's internal printf for printing pgm strings.
 		
 	Pgm strings:
 		Tinytest uses a lot of strings, some targets (notably the Atmel AVR) can put strings into Flash memory. We use some macros to minimise RAM usage for 
@@ -68,6 +69,7 @@
 /* Use tinytest's vprintf. */
 #undef TT_VPRINTF
 #define TT_FMT_PSTR "%P"
+#define TT_VPRINTF_PSTR
 
 #include <pgmspace.h>
 #undef tt_pgm_str_t			/* No need to define tt_pgm_str_t as default will do. */
@@ -90,6 +92,7 @@
 #include <stdio.h>
 #define TT_VPRINTF(_fmt, ...) vprintf(fmt, __VA_ARGS__)
 #undef TT_FMT_PSTR
+#undef TT_VPRINTF_PSTR
 
 /* Use normal strings. */
 #undef tt_pgm_str_t

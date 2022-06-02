@@ -1,0 +1,347 @@
+mingw32-make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --question
+mingw32-make: *** No rule to make target 'all'.  Stop.
+ 
+# GNU Make 4.3
+# Built for Windows32
+# Copyright (C) 1988-2020 Free Software Foundation, Inc.
+# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+# This is free software: you are free to change and redistribute it.
+# There is NO WARRANTY, to the extent permitted by law.
+
+# Make data base, printed on Tue Nov 30 10:40:44 2021
+
+# Variables
+
+# environment
+SYSTEMDRIVE = C:
+# environment
+LC_ALL = C
+# environment
+USERPROFILE = C:\Users\admin
+# environment
+LOCALAPPDATA = C:\Users\admin\AppData\Local
+# environment
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-d74187ec-55dc-411d-aaf5-1781ee69dd3d-sock
+# environment
+VSCODE_CWD = C:\Users\admin\Downloads
+# environment
+CARBON_MEM_DISABLE = 1
+# environment
+SYSTEMROOT = C:\WINDOWS
+# environment
+PROCESSOR_LEVEL = 21
+# environment
+PSMODULEPATH = C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules
+# default
+MAKE_COMMAND := mingw32-make.exe
+# automatic
+@D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
+# environment
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_19104_CDHUHLBGHMMWEDSB
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# default
+.VARIABLES := 
+# automatic
+%D = $(patsubst %/,%,$(patsubst %\,%,$(dir $%)))
+# automatic
+^D = $(patsubst %/,%,$(patsubst %\,%,$(dir $^)))
+# environment
+VSCODE_LOG_STACK = false
+# automatic
+%F = $(notdir $%)
+# environment
+VSCODE_CODE_CACHE_PATH = C:\Users\admin\AppData\Roaming\Code\CachedData\3a6960b964327f0e3882ce18fcebd07ed191b316
+# environment
+LANG = C
+# default
+.LOADED := 
+# environment
+TMP = C:\Users\admin\AppData\Local\Temp
+# default
+.INCLUDE_DIRS = .
+# makefile
+MAKEFLAGS = pqrR
+# environment
+ONEDRIVE = C:\Users\admin\OneDrive
+# makefile
+CURDIR := c:/Users/admin/Documents/git/tinytest/examples/desktop
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+# automatic
+*D = $(patsubst %/,%,$(patsubst %\,%,$(dir $*)))
+# environment
+PROGRAMFILES = C:\Program Files
+# environment
+MFLAGS = -pqrR
+# default
+.SHELLFLAGS := -c
+# environment
+COMMONPROGRAMW6432 = C:\Program Files\Common Files
+# automatic
++D = $(patsubst %/,%,$(patsubst %\,%,$(dir $+)))
+# makefile (from 'Makefile', line 1)
+MAKEFILE_LIST := Makefile
+# automatic
+@F = $(notdir $@)
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# environment
+VSCODE_PID = 19104
+# automatic
+?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
+# automatic
+*F = $(notdir $*)
+# automatic
+<D = $(patsubst %/,%,$(patsubst %\,%,$(dir $<)))
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
+# environment
+ONEDRIVECONSUMER = C:\Users\admin\OneDrive
+# default
+MAKE_HOST := Windows32
+# makefile (from 'Makefile', line 13)
+OBJS = tinytest.o tt_main.o
+# environment
+PROGRAMDATA = C:\ProgramData
+# default
+SHELL := sh.exe
+# environment
+HOMEPATH = \Users\admin
+# default
+MAKECMDGOALS := all
+# environment
+DRIVERDATA = C:\Windows\System32\Drivers\DriverData
+# environment
+COMSPEC = C:\WINDOWS\system32\cmd.exe
+# environment
+WINDIR = C:\WINDOWS
+# environment
+MAKELEVEL := 0
+# default
+MAKE = $(MAKE_COMMAND)
+# environment
+PATH = C:\Python37\Scripts\;C:\Python37\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\PuTTY\;C:\Program Files\SlikSvn\bin;C:\Program Files\TortoiseSVN\bin;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\Microchip\xc8\v2.31\bin;C:\Program Files\dotnet\;C:\Program Files (x86)\dotnet\;C:\Program Files\Git\cmd;C:\Program Files\TortoiseGit\bin;C:\Program Files\arduino-cli;C:\msys64\mingw64\bin;C:\Program Files\CMake\bin;C:\Users\admin\AppData\Local\Microsoft\WindowsApps;C:\Program Files\arduino-cli;;C:\Users\admin\AppData\Local\Programs\Microsoft VS Code\bin
+# environment
+COMPUTERNAME = DR-CELEPHICUS
+# default
+MAKEFILES := 
+# automatic
+^F = $(notdir $^)
+# environment
+PROMPT = $P$G
+# environment
+LOGONSERVER = \\DR-CELEPHICUS
+# environment
+VSCODE_LOG_NATIVE = false
+# environment
+USERNAME = admin
+# environment
+COMMONPROGRAMFILES = C:\Program Files\Common Files
+# automatic
+?F = $(notdir $?)
+# environment
+PROGRAMW6432 = C:\Program Files
+# environment
+PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW
+# automatic
++F = $(notdir $+)
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# environment
+USERDOMAIN = DR-CELEPHICUS
+# 'override' directive
+GNUMAKEFLAGS := 
+# environment
+OS = Windows_NT
+# environment
+__COMPAT_LAYER = DetectorsAppHealth
+# makefile (from 'Makefile', line 1)
+EXE = tt_main.exe
+# makefile
+.DEFAULT_GOAL := tt_main.exe
+# default
+MAKE_VERSION := 4.3
+# environment
+PROGRAMFILES(X86) = C:\Program Files (x86)
+# environment
+USERDOMAIN_ROAMINGPROFILE = DR-CELEPHICUS
+# environment
+NUMBER_OF_PROCESSORS = 2
+# environment
+PUBLIC = C:\Users\Public
+# environment
+APPDATA = C:\Users\admin\AppData\Roaming
+# makefile (from 'Makefile', line 4)
+CFLAGS = -Wall -Werror -Wundef -I..\..\src -I.
+# environment
+HOMEDRIVE = C:
+# environment
+PROCESSOR_ARCHITECTURE = AMD64
+# makefile (from 'Makefile', line 6)
+TT_SRCS = ..\..\src\tinytest.c
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/services/extensions/node/extensionHostProcess
+# environment
+COMMONPROGRAMFILES(X86) = C:\Program Files (x86)\Common Files
+# environment
+SYNAPROGDIR = Synaptics\SynTP
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# environment
+TEMP = C:\Users\admin\AppData\Local\Temp
+# environment
+VSCODE_IPC_HOOK = \\.\pipe\40c024692924a7e0e09c00bf44e8c2ef-1.62.2-main-sock
+# default
+.RECIPEPREFIX := 
+# automatic
+<F = $(notdir $<)
+# makefile (from 'Makefile', line 8)
+DEPS = ..\..\src\tinytest.h tinytest_local.h
+# default
+SUFFIXES := 
+# environment
+ALLUSERSPROFILE = C:\ProgramData
+# environment
+SESSIONNAME = Console
+# default
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync load
+# environment
+PROCESSOR_REVISION = 7000
+# makefile (from 'Makefile', line 3)
+CC = g++.exe
+# environment
+PROCESSOR_IDENTIFIER = AMD64 Family 21 Model 112 Stepping 0, AuthenticAMD
+# variable set hash-table stats:
+# Load=101/1024=10%, Rehash=0, Collisions=11/133=8%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# . (key c:/Users/admin/Documents/git/tinytest/examples/desktop, mtime 1637557834): 9 files, no impossibilities.
+
+# 9 files, no impossibilities in 1 directories.
+
+# Implicit Rules
+
+# No implicit rules.
+
+# Files
+
+tinytest.o: ..\..\src\tinytest.c ..\..\src\tinytest.h tinytest_local.h
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 19):
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  Last modified 2021-11-17 08:49:15
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+..\..\src\tinytest.h:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+clean:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 27):
+	del $(OBJS) $(EXE)
+	
+
+# Not a target:
+..\..\src\tinytest.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+tinytest_local.h:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+all:
+#  Command line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+
+tt_main.o: tt_main.c ..\..\src\tinytest.h tinytest_local.h
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 22):
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+tt_main.exe: tinytest.o tt_main.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 16):
+	$(CC) -o $(EXE) $^ $(LDFLAGS)
+	
+
+test: tt_main.exe
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 30):
+	@echo ***************** Verbose
+	-$(EXE) -v
+	@echo ***************** Default
+	-$(EXE)
+	@echo ***************** Concise
+	-$(EXE) -c
+	@echo ***************** Quiet
+	-$(EXE) -q
+
+# Not a target:
+tt_main.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+.PHONY: clean test
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# files hash-table stats:
+# Load=14/1024=1%, Rehash=0, Collisions=1/39=3%
+# VPATH Search Paths
+
+# No 'vpath' search paths.
+
+# No general ('VPATH' variable) search path.
+
+# strcache buffers: 1 (0) / strings = 17 / storage = 165 B / avg = 9 B
+# current buf: size = 8162 B / used = 165 B / count = 17 / avg = 9 B
+
+# strcache performance: lookups = 39 / hit rate = 56%
+# hash-table stats:
+# Load=17/8192=0%, Rehash=0, Collisions=0/39=0%
+# Finished Make data base on Tue Nov 30 10:40:44 2021
+
+ 

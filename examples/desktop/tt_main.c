@@ -7,14 +7,14 @@ void testDiag() {
 	ttDiagnostic("Int: %d, %d, %08x", 123, -456, 0xff);
 }
 void testAssertOk() {
-	TT_ASSERT(true);
+	TT_ASSERT(1);
 }
 void testAssertFail() {
-	TT_ASSERT(false);
+	TT_ASSERT(0);
 }
 void testIgnore() {
 	TT_IGNORE();
-	TT_ASSERT(false);
+	TT_ASSERT(0);
 }
 
 void testFailExplicit() {
@@ -25,14 +25,14 @@ void dumper() {
 	ttDiagnostic("Dump function.");
 }
 void testDump() {
-	TT_ASSERT(false);
+	TT_ASSERT(0);
 }
 
 void setup() { ttDiagnostic("In setup()."); }
 void teardown() { ttDiagnostic("In teardown()."); }
-void testFixtureOk() { TT_ASSERT(true); }
-void testFixtureFail() { TT_ASSERT(false); }
-void testFixtureIgnore() { TT_IGNORE(); TT_ASSERT(false); }	
+void testFixtureOk() { TT_ASSERT(1); }
+void testFixtureFail() { TT_ASSERT(0); }
+void testFixtureIgnore() { TT_IGNORE(); TT_ASSERT(0); }	
 
 void testAssertEqOk() { 
 	TT_ASSERT_INT(2147483647, 2147483647); 

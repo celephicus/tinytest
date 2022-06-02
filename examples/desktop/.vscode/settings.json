@@ -1,0 +1,17 @@
+{
+    "makefile.extensionOutputFolder": "./.vscode",
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "c:/Users/admin/Documents/git/tinytest/examples/desktop",
+            "binaryPath": "c:\\Users\\admin\\Documents\\git\\tinytest\\examples\\desktop\\tt_main.exe",
+            "binaryArgs": [
+                "-v"
+            ]
+        },
+        {
+            "cwd": "c:\\Users\\admin\\Documents\\git\\tinytest\\examples\\desktop",
+            "binaryPath": "c:\\Users\\admin\\Documents\\git\\tinytest\\examples\\desktop\\tt_main.exe",
+            "binaryArgs": []
+        }
+    ]
+}

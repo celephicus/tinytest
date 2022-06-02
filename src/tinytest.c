@@ -25,9 +25,10 @@ static void tt_vprintf(tt_pgm_str_t fmt, va_list args) {
     char c;    						/* Holds a char from the format string. */
     char buf[TT_VPRINTF_BUFLEN]; 	/* Reverse formatted number. */
     char* pb;    					/* Used as pointer to an element in buf. */
-    char informat = 0; 				/* Set up for scanning. */
+    char informat = 0; 				/* Start off not reading a format. */
     char base;	
-
+	char fill_zero;
+	
     /* Start scanning. */
     while ('\0' != (c = (*fmt++))) {
         if (informat) {
@@ -35,37 +36,41 @@ static void tt_vprintf(tt_pgm_str_t fmt, va_list args) {
             case 'x':					/* Hex int, */
                 base = 16;
                 a.u = va_arg(args, unsigned);
+				fill_zero = 1;
                 goto print_unsigned;
-            case 'd':            		/* Signed decimal integer. */
+       
+			case 'd':            		/* Signed decimal integer. */
                 a.i = va_arg(args, int);
+				fill_zero = 0;
                 if (a.i < 0) {			/* Handle negative integer. */
                     tt_putchar('-');
                     a.u = -a.i;
                 }
-                else
-                    a.u = a.i;			/* Some compiler complained if I left this out, but it did not add any code, strange... */
 print_unsigned:
-                pb = buf;
-                do {
+                pb = buf + sizeof(buf) - 1;		/* Last element. */
+				*pb-- = '\0';					/* Terminate. */
+                do {							/* Fill with digits from least significant. */
                     *pb = (char)(a.u % base) + '0';
                     if (*pb > '9')
                         *pb += 'a' - ('9' + 1);
-                    ++pb;
+                    --pb;
                     a.u /= base;
                 } while (a.u > 0);
-
-                while (pb != buf)	                /* Print integer backwards. */
-                    tt_putchar(*--pb);
-
-                goto done_format;
+				if (fill_zero) {				/* Zero fill... */
+					while (pb > buf)
+						*pb-- = '0';
+				}
+				a.str = pb + 1;
+                goto print_string;
 
             case 's':		           				/* Char string. */
                 a.str = va_arg(args, const char*);
+print_string:
                 while ('\0' != (c = (*a.str++))) 
                     tt_putchar(c);
                 goto done_format;
 
-#ifdef TT_FMT_PSTR
+#ifdef TT_VPRINTF_PSTR
             case 'P':		           				/* Char string. */
                 a.pstr = va_arg(args, tt_pgm_str_t);
                 while ('\0' != (c = (tt_pgm_str_read(a.pstr++)))) 

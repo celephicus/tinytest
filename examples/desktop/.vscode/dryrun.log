@@ -1,0 +1,11 @@
+mingw32-make.exe tt_main.exe --dry-run --always-make --keep-going --print-directory
+mingw32-make: Entering directory 'c:/Users/admin/Documents/git/tinytest/examples/desktop'
+ 
+g++.exe -c -o tinytest.o ..\..\src\tinytest.c -Wall -Werror -Wundef -I..\..\src -I.
+ 
+g++.exe -c -o tt_main.o tt_main.c -Wall -Werror -Wundef -I..\..\src -I.
+ 
+g++.exe -o tt_main.exe tinytest.o tt_main.o 
+ 
+mingw32-make: Leaving directory 'c:/Users/admin/Documents/git/tinytest/examples/desktop'
+ 

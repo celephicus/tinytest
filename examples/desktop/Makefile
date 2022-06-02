@@ -1,7 +1,7 @@
 EXE=tt_main.exe
  
 CC = g++.exe
-CFLAGS = -Wall -Werror -I..\..\src -I.
+CFLAGS = -Wall -Werror -Wundef -I..\..\src -I.
 
 TT_SRCS = ..\..\src\tinytest.c
 # SRCS = ..\..\src\tinytest.c tt_main.c #  test-all.o test-dump.o test-fixture.o
