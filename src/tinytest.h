@@ -5,31 +5,21 @@
 #ifndef TINYTEST_H__
 #define TINYTEST_H__
 
-#include <stdarg.h> /* We use variable argument lists, so clients need this header. */
-#include <stdlib.h> /* NULL is very useful. */
+#include <stdarg.h> // We use variable argument lists, so clients need this header. 
+#include <stdlib.h> // NULL is very useful. 
 
-/* Local settings - customise to suit your local platform. */
+// Local settings - customise to suit your local platform. 
 #include "tinytest_local.h"
 
-/* Set settings defaults. */
+// Set settings defaults. 
 
-/* Tinytest's int type... */
-#ifndef tt_int_t
-#define tt_int_t int
-#endif
-#ifndef TT_FMT_INT
-#define TT_FMT_INT "%d"
-#endif
-#ifndef TT_FMT_HEX
-#define TT_FMT_HEX "%08x"
-#endif
-
-/* Tinytest's printf... */
+/* Tinytest's program strings, aka a "pstring". The AVR processor can store constant strings in Flash memory, which saves RAM, but
+	otherwise is a pain, as they require special macros to declare, and special library functions. 
+	The defaults below set a pstring to be equivalent to `const char[]'. For details of the macros below refer to tinytest_local.h.
+*/
 #ifndef TT_FMT_PSTR
 #define TT_FMT_PSTR "%s"
 #endif
-
-/* Tinytest's program strings... */
 #ifndef tt_pgm_str_t
 #define tt_pgm_str_t const char*
 #endif
@@ -47,24 +37,15 @@
 #define tt_strcmp_pstr(_ps, _s) strcmp(_ps, _s)
 #endif
 
-#define STR_(a_, b_) a_##b_	
-#define STR(a_, b_) STR_(a_, b_)
+// Get the filename for a file in one place only. This save a lot of space compared with using __FILE__, which is the full path.
+#define TT_DECLARE_MODULE(name_) static tt_pgm_str_t TT_FILENAME = TT_PSTR(name_)
 
-/* Get the filename for a file in one place only. 
-	This idea is borrowed from Steve Maguire's somewhat variable book "Writing Solid Code: Microsoft's techniques for developing bug-free programs". */
-#if 0
-	#define TT_FILENAME STR(TT_FN_, TT_MODULE_NAME)
-	#define MK_STR(x_) #x_
-	static tt_pgm_str_t TT_FILENAME = MK_STR(TT_MODULE_NAME);
-#endif
-#define TINYTEST_DECLARE_MODULE(name_) static tt_pgm_str_t TT_FILENAME = TT_PSTR(name_)
-
-/* Various modes that the tests can be run it, controlling the amount of output. */
+// Various modes that the tests can be run it, controlling the amount of output. 
 enum { 
-    TT_OUTPUT_MODE_QUIET,       /* No output at all. */
-    TT_OUTPUT_MODE_CONCISE,     /* Only print a single 'F' for failures, 'I' for ignored, or a '.' for success. With summary report at end. */
-    TT_OUTPUT_MODE_DEFAULT,     /* Print full information for failures only. With summary report at end. */
-    TT_OUTPUT_MODE_VERBOSE,     /* Prints information for all tests, and diagnostic messages. With summary report at end. */
+    TT_OUTPUT_MODE_QUIET,       // No output at all. 
+    TT_OUTPUT_MODE_CONCISE,     // Only print a single 'F' for failures, 'I' for ignored, or a '.' for success. With summary report at end. 
+    TT_OUTPUT_MODE_DEFAULT,     // Print full information for failures only. With summary report at end. 
+    TT_OUTPUT_MODE_VERBOSE,     // Prints information for all tests, and diagnostic messages. With summary report at end. 
 };
 
 /* Tinytest can be used in 3 ways, depending on your needs, The simplest is basic mode, which is suitable for running on a desktop system. 
@@ -72,86 +53,88 @@ enum {
 Basic:
 	In which case, you only really need to write the function runTests(), which will contain calls to the followiny Tinytest functions only:
 	
-		tt_set_dump()		-- register a dump function to emit diagnostics on a failure.
-		tt_register_fixture()	-- register setup/teardown functions for all subsequent tests.
-		tt_run_test()		-- run a test function, with filename, line number & descripton, usually the function name.
-		TT_TEST_SIMPLE()		-- run a test function, with other values set.
+		ttSetDump()		  	-- register a dump function to emit diagnostics on a failure.
+		ttRegisterFixture() -- register setup/teardown functions for all subsequent tests.
+		ttRunTest()		  	-- run a test function, with filename, line number & descripton, usually the function name.
+		TT_TEST_SIMPLE()	-- run a test function, with other values set.
 		
-	Then call tt_main with argc & argv from the command line.
+	Then call ttMain with argc & argv from the command line.
 
 Advanced:	
-	For advanced use, instead of calling tt_main, call these functions in order;
-	    tt_start()
-		runTests();
-		inytest_finish();
+	For advanced use, instead of calling ttMain, call these functions in order;
+	    ttStart()
+		ttRunTests();
+		ttFinish();
 
 Magic:
-	The magic mode uses a Python script to discover all test functions in a directory and builds a source file with the necessary functions to run
-	those tests. This requires the use of special macros that are read by the script, and used to build the source file.
+	The magic mode uses a Python script to discover all test functions in a directory and builds a source file with the necessary 
+	functions to run those tests. This requires the use of special macros that are read by the script, and used to build the source file.
+	In general function declarations are autogenerated, so test files do not need header files.
 	
 	All files matching the pattern 'test*.c' are scanned. 
-		Any function definitions matching void testXXX() are considered tests and are run directly.
-		Any function definitions matching void testXXX(args) are considered tests and have a stub function with signature void f(void) autogenerated that 
-		can be run as a test. Note that the arguments should be constants, using global variables is bad style. 
+	Any function definitions matching `void testXXX()' are considered tests and are run directly.
+	Any function definitions matching `void testXXX(args)` are considered parameterised tests and use the TT_TEST_CASE() macro to
+	generate a stub function with signature `void f(void)' that can be run as a test. Note that the arguments should be constants 
+	if possible.
 	
-	The macros TT_BEGIN_FIXTURE(setup, teardown) & TT_END_FIXTURE() use a fixture functions, which must be externally linked. Declarations are autogenerated.
-	The macro TT_DUMP_FUNC(dumper) sets a dump function, which must be externally linked. A declaration is autogenerated.
-	
-	The macro TT_IGNORE_FILE aborts scanning of the rest of the file. Used for debugging.
+	The macros TT_BEGIN_FIXTURE(setup, teardown) & TT_END_FIXTURE() use fixture functions for all tests. 
+	The macro TT_DUMP_FUNC(dumper) sets a dump function, which must be externally linked. 
+	The macro TT_IGNORE_FILE aborts scanning of the rest of the file. 
 	The macro TT_INCLUDE_EXTRA may be used to include header files into the autogenerated file.
 */	
 	
-/** Initialise the library before we actually run any tests. Set the output_mode value to one of the TT_OUTPUT_MODE_xx
-    values to control the verbosity of the output. */
+/** Initialise the library before we actually run any tests. 
+	Set the output_mode value to one of the TT_OUTPUT_MODE_xxx values to control the verbosity of the output. 
+	If the groupstr is non-null then tests are only run if their description contains groupstr. */
 void ttStart(int output_mode, const char* groupstr);
 
-/** Function that runs the tests. Either write it manually or use the code generator. */
+// Function that runs the tests. Either write it manually or use the code generator. 
 void ttRunTests(void);
 
-/** Finish performing tests, and print a summary message. */
+// Finish performing tests, and print a summary message. 
 int ttFinish(void);
 
-/** Main function that calls the runTests() function after processing the command line arguments. */
+// Main function that calls the runTests() function after processing the command line arguments. 
 int ttMain(int argc, char* argv[]);
 
 /*
 	These functions/macros should only be used within the body of runTests().
 */
 	
-/** Type of a function that dumps diagnostics on a test failure. */
+// Type of a function that dumps diagnostics on a test failure. 
 typedef void (*tt_dumpfunc_t)(void);
 
 /* Set the function that is called when a test fails. This can be used to dump stuff via the tt_diag() function.
     If NULL then no dumping takes place. */
 void ttSetDump(tt_dumpfunc_t dumpfunc);
 
-/* Type of a setup or teardown function. */
+// Type of a setup or teardown function. 
 typedef void (*tt_fixture_func_t)(void);
 
-/** Set setUp() & tearDown() functions that are called before each test is run. set NULL for an empty function. */
+// Set setUp() & tearDown() functions that are called before each test is run. set NULL for an empty function. 
 void ttRegisterFixture(tt_fixture_func_t setup, tt_fixture_func_t teardown);
 
 /** Emit a diagnostic message (if non-NULL). The string should not contain a trailing newline, as the function will print one. 
     The message is processed by printf, so arguments can be inserted. */
 void ttDiagnostic(tt_pgm_str_t msg, ...);
 
-/** Call a test function with an explicit description. The lineno argument is the first line of the function. */
+// Call a test function with an explicit description. The lineno argument is the first line of the function. 
 void ttRunTest(void (*test_func)(void), tt_pgm_str_t filename, int lineno, tt_pgm_str_t desc);
 
-/** Basic command to run a test function and fill in the filename, line number & description. */
+// Basic command to run a test function and fill in the filename, line number & description. 
 #define TT_TEST_SIMPLE(x_) 	ttRunTest(x_, TT_FILENAME, __LINE__, TT_PSTR(#x_ "()"))
 
 /*
 	These functions/macros should only be used within the body of a test function.
 */
 
-/** Cause an explicit test failure. */
+// Cause an explicit test failure. 
 #define TT_FAIL(msg_) do { \
     tt_print_fail_message(TT_FILENAME, __LINE__,  TT_PSTR("Failure: " TT_FMT_PSTR), msg_);  \
     tt_abort(TINY_TEST_FAIL);         \
 } while (0)
 
-/** Check that a condition is true. */
+// Check that a condition is true. 
 #define TT_ASSERT(cond_) if (cond_) {} else do { \
     tt_print_fail_message(TT_FILENAME, __LINE__,  TT_PSTR("Expected `" TT_FMT_PSTR "' to be true"), TT_PSTR(#cond_)); \
     tt_abort(TINY_TEST_FAIL);         \
@@ -166,11 +149,11 @@ void ttRunTest(void (*test_func)(void), tt_pgm_str_t filename, int lineno, tt_pg
   } \
 } while (0)
 	
-/** Check the value of an integer. */
+// Check the value of an integer. 
 #define TT_ASSERT_INT(value_, expected_) TT_ASSERT_GENERIC(tt_int_t, TT_FMT_INT, value_, expected_)
 #define TT_ASSERT_INT_HEX(value_, expected_) TT_ASSERT_GENERIC(tt_int_t, "0x" TT_FMT_HEX, value_, expected_)
 
-/** Check the value of a string. */
+// Check the value of a string. 
 #define TT_ASSERT_STR(value_, expected_) do { \
   const char* _tt__value = (value_); \
   tt_pgm_str_t _tt__expected = TT_PSTR(expected_); \
@@ -184,13 +167,13 @@ void ttRunTest(void (*test_func)(void), tt_pgm_str_t filename, int lineno, tt_pg
     macro. */
 #define TT_IGNORE() tt_abort(TINY_TEST_IGNORED) 
 
-/* A little helper function for checking that a memory buffer has not been corrupted by filling it with random values. Set seed to any value you like. */
+// A little helper function for checking that a memory buffer has not been corrupted by filling it with random values. Set seed to any value you like. 
 void ttFillMemory(void* buf, size_t len, int seed);
 
-/* Macro to verify that the buffer has not been written to. */
+// Macro to verify that the buffer has not been written to. 
 #define TT_VERIFY_MEMORY(buf_, len_, seed_) tt_verify_memory((buf_), (len_), (seed_), TT_FILENAME, __LINE__)
 
-/* Factor for the TT_VERIFY_MEMORY() macro. */
+// Factor for the TT_VERIFY_MEMORY() macro. 
 void ttVerifyMemory(const void* buf, size_t len, int seed, tt_pgm_str_t filename, int lineno);
 
 /*
@@ -200,12 +183,11 @@ enum { TINY_TEST_SUCCESS, TINY_TEST_FAIL, TINY_TEST_IGNORED };
 void tt_print_fail_message(tt_pgm_str_t filename, int lineno, tt_pgm_str_t msg, ...);
 void tt_abort(int reason);
 
+// The script that builds a runtests() function uses these pseudo-macros in the test code. The definitions turn them into no-ops. 
+#define TT_TEST_CASE(...) // empty 
+#define TT_BEGIN_FIXTURE(a, b) // empty 
+#define TT_END_FIXTURE() // empty 
+#define TT_DUMP_FUNC(a) // empty 
+#define TT_INCLUDE_EXTRA(a) // empty 
 
-/* The script that builds a runtests() function uses these pseuda-macros in the test code. The definitions turn them into no-ops. */
-#define TT_TEST_CASE(...) /* empty */
-#define TT_BEGIN_FIXTURE(a, b) /* empty */
-#define TT_END_FIXTURE() /* empty */
-#define TT_DUMP_FUNC(a) /* empty */
-#define TT_INCLUDE_EXTRA(a) /* empty */
-
-#endif /* TINYTEST_H__ */
+#endif // TINYTEST_H__ 

@@ -11,13 +11,8 @@
 	TINYTEST CONFIGURATION  
 */	
 
-/* When Tinytest checks integers it needs a type defined to do the check, Typically this is either `int' or `long int'. If not defined it defaults to `int'. 
-	Don't forget to verify that the printf format is correct. */
-#define tt_int_t int
-
-/* Printf formats for decimal & hex int type. These work on standard printf() for 32 bit targets and the minimal printf() internal to tinytest. */
-#define TT_FMT_INT "%d"
-#define TT_FMT_HEX "%08x"
+/* When Tinytest checks integers it needs a type defined to do the check, Typically this is either `int' or `long int'. If not defined 
+	it defaults to `int'. Don't forget to verify that the printf format is correct. */
 
 /*
 	TARGET CONFIGURATION  
@@ -55,13 +50,18 @@
 */
 
 /* Tinytest can include appropriate configuration, or you can do it all yourself. */
-#if 0
-#error "You need to add configuration for Tinytest!"
-#elif defined(__AVR__)
+
+#if defined(__AVR__)
 
 /*
 		AVR TARGET
 */	
+
+#define tt_int_t int
+
+/* Printf formats for decimal & hex int type.  */
+#define TT_FMT_INT "%d"
+#define TT_FMT_HEX "%04x"
 
 /* Use tinytest's vprintf. */
 #undef TT_VPRINTF
@@ -69,11 +69,11 @@
 #define TT_VPRINTF_BUFLEN (10) /* Make sure that the maximum number can fit in here! */
 
 #include <pgmspace.h>
-#undef tt_pgm_str_t			/* No need to define tt_pgm_str_t as default will do. */
-#define TT_ATTR_PGM PROGMEM
-#define TT_PSTR(_s) PSTR(_s)
-#define tt_pgm_str_read(_s) ((char)pgm_read_byte((_s)))
-#define tt_strcmp_pstr(_ps, _s) (strcmp_P(_ps, _s))
+#define tt_pgm_str_t PGM_P				// From pgmspace.h, I think it's actually `const char*'. 
+#define TT_ATTR_PGM PROGMEM		// From pgmspace.h.
+#define TT_PSTR(_s) PSTR(_s)		// From pgmspace.h.
+#define tt_pgm_str_read(_s) ((char)pgm_read_byte((_s))) 		// From pgmspace.h.
+#define tt_strcmp_pstr(_ps, _s) (strcmp_P(_ps, _s))	// From pgmspace.h, not string.h as you might think. 
 
 /* No tt_main(). */
 #undef TT_WANT_TT_MAIN
@@ -85,15 +85,22 @@
 	ALL OTHER TARGETS
 */	
 
-/* Use stdio's vprintf. */
-#include <stdio.h>
-#define tt_putchar(_c) putchar(_c)
-#undef TT_FMT_PSTR
+#define tt_int_t int
+
+/* Printf formats for decimal & hex int type.  */
+#define TT_FMT_INT "%d"
+#define TT_FMT_HEX "%08x"		// 32 bit ints. 
 
 #if 0
+/* Use stdio's vprintf. */
+#include <stdio.h>
 #define TT_VPRINTF(_fmt, ...) vprintf(_fmt, __VA_ARGS__)
 #else
+/* Use tinytest's vprintf. */
+#include <stdio.h>
 #undef TT_VPRINTF
+#define tt_putchar(_c) putchar(_c)
+#undef TT_FMT_PSTR
 #define TT_VPRINTF_BUFLEN (10) /* Make sure that the maximum number can fit in here! */
 #endif
 
