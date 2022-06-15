@@ -1,7 +1,7 @@
 
 #include "tinytest.h"
 
-TINYTEST_DECLARE_MODULE("tt_main.cpp");
+TT_DECLARE_MODULE("tt_main.cpp");
 
 void testDiag() {
 	ttDiagnostic("Int: %d, %d, %08x", 123, -456, 0xff);
