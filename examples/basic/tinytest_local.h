@@ -18,6 +18,10 @@
 	TARGET CONFIGURATION  
 */	
 
+/* String for a newline. */
+#define TT_NEWLINE "\n"
+
+
 /* 
 	Printf:
 		Tinytest may be used on targets with no printf! So it defines it's own minimal vprintf, which you don't have to use if you have one available. 

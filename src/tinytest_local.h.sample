@@ -19,6 +19,9 @@
 #define TT_FMT_INT "%d"
 #define TT_FMT_HEX "%08x"
 
+/* String for a newline. */
+#define TT_NEWLINE "\r"
+
 /*
 	TARGET CONFIGURATION  
 */	

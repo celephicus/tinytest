@@ -101,21 +101,23 @@ int ttMain(int argc, char* argv[]);
 	These functions/macros should only be used within the body of runTests().
 */
 	
-// Type of a function that dumps diagnostics on a test failure. 
-typedef void (*tt_dumpfunc_t)(void);
-
-/* Set the function that is called when a test fails. This can be used to dump stuff via the tt_diag() function.
-    If NULL then no dumping takes place. */
-void ttSetDump(tt_dumpfunc_t dumpfunc);
-
-// Type of a setup or teardown function. 
+// Type of a setup, teardown or dump function. 
 typedef void (*tt_fixture_func_t)(void);
 
-// Set setUp() & tearDown() functions that are called before each test is run. set NULL for an empty function. 
-void ttRegisterFixture(tt_fixture_func_t setup, tt_fixture_func_t teardown);
+/* Sets 3 functions that are called as part of each test. 
+	The setup function is called before each test is run. It may use TEST_ASSERT_xxx macros which cause the test
+	  to fail. 
+    The dump function is called when a test fails. This can be used to dump stuff via the tt_printf() function.
+      The output should have a trailing newline.
+    The teardown function is called after a test fails or runs to completion. It may use TEST_ASSERT_xxx macros,
+      which cause the test to fail. 
+	Any function may be set to NULL for an empty function. */
+void ttRegisterFixture(tt_fixture_func_t setup, tt_fixture_func_t dump, tt_fixture_func_t teardown);
 
-/** Emit a diagnostic message (if non-NULL). The string should not contain a trailing newline, as the function will print one. 
-    The message is processed by printf, so arguments can be inserted. */
+#define ttUnregisterFixture() ttRegisterFixture(NULL, NULL, NULL)
+
+/** Emit a diagnostic message (if non-NULL). The string should not contain a trailing newline, as the function 
+	will print one. The message is processed by printf, so arguments can be inserted. */
 void ttDiagnostic(tt_pgm_str_t msg, ...);
 
 // Call a test function with an explicit description. The lineno argument is the first line of the function. 

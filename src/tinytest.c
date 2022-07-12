@@ -116,25 +116,17 @@ static struct {
     int tf_lineno;                      // Line number of currently running test function.
     tt_pgm_str_t test_desc;  			// Description of test, e.g. "test_foo(1245)".
     int pass_count, fail_count, ignore_count; // Count of the number of tests that have been passed/failed/ignored.
-    int col;                            // Current column position for pretty printing.
     const char* groupstr;   			// If non-NULL then only test descriptions containing this string are run.
-    tt_dumpfunc_t dump_func;      		// User function to emit diagnostics on a fail. May be NULL.
     tt_fixture_func_t setup, teardown;  // User functions called before & after a test. May be NULL.
+    tt_fixture_func_t dump;   			// User function to emit diagnostics on a fail. May be NULL.
     int output_mode;                    // Controls verbosity of output.
 } f_ctx;
 
-void ttSetDump(tt_dumpfunc_t dump_func) {
-    f_ctx.dump_func = dump_func;
-}
-
-void ttRegisterFixture(tt_fixture_func_t setup, tt_fixture_func_t teardown) {
+void ttRegisterFixture(tt_fixture_func_t setup, tt_fixture_func_t dump, tt_fixture_func_t teardown) {
     f_ctx.setup = setup;
     f_ctx.teardown = teardown;
+    f_ctx.dump = dump;
 }
-
-// Some helpers.
-static const void newline(void) { tt_putchar('\n'); f_ctx.col = 0; }
-static const void q_newline(void) { if (f_ctx.col > 0) newline(); }
 
 // Called at the start of the test.
 void ttStart(int output_mode, const char* groupstr) {
@@ -148,10 +140,9 @@ void ttDiagnostic(tt_pgm_str_t msg, ...) {
 		if (TT_OUTPUT_MODE_VERBOSE == f_ctx.output_mode) { // Only in verbose emit diagnostic messages.
 			va_list args;
 			va_start(args, msg);
-			q_newline();
 			tt_printf(TT_PSTR("# "));
 			TT_VPRINTF(msg, args);
-			newline();
+			tt_printf(TT_PSTR(TT_NEWLINE));
 			va_end(args);
 		}
     }
@@ -171,7 +162,6 @@ void tt_print_fail_message(tt_pgm_str_t filename, int lineno, tt_pgm_str_t msg, 
 		break;
  	case TT_OUTPUT_MODE_CONCISE:
         tt_putchar('F');
-        f_ctx.col += 1;
 		break;
 	case TT_OUTPUT_MODE_DEFAULT:	 // Default & verbose both emit diagnostics for failures.
 		// Fall through...
@@ -181,8 +171,7 @@ void tt_print_fail_message(tt_pgm_str_t filename, int lineno, tt_pgm_str_t msg, 
         va_start(args, msg);
         TT_VPRINTF(msg, args);
         va_end(args);
-		tt_putchar('.');		// A sentence must always end with a full stop.
-        newline();
+		tt_printf(TT_PSTR("." TT_NEWLINE));		// A sentence must always end with a full stop.
 		break;
     }
 }
@@ -193,13 +182,11 @@ static void report(tt_pgm_str_t msg, char concise) {
 		break;
  	case TT_OUTPUT_MODE_CONCISE:	// Just print a single char.
         tt_putchar(concise);
-        ++f_ctx.col;
 		break;
 	case TT_OUTPUT_MODE_DEFAULT:	 // Default no output for success, ignored, only failures, which are handled by another output routine.
 		break;
 	case TT_OUTPUT_MODE_VERBOSE:
-        tt_printf(TT_PSTR("[%s]: %s"), f_ctx.test_desc, msg);
-        newline();
+        tt_printf(TT_PSTR("[%s]: %s" TT_NEWLINE), f_ctx.test_desc, msg);
 		break;
    }
 }
@@ -233,8 +220,8 @@ void ttRunTest(void (*test_func)(void), tt_pgm_str_t filename, int lineno, tt_pg
 			f_ctx.ignore_count += 1;
         }
         else { // We have a failure. Call dump function if non-NULL.
-            if (NULL != f_ctx.dump_func)
-                f_ctx.dump_func();
+            if (NULL != f_ctx.dump)
+                f_ctx.dump();
             f_ctx.fail_count += 1;
         }
 
@@ -252,14 +239,13 @@ int ttFinish(void) {
 	case TT_OUTPUT_MODE_DEFAULT:
 		// Fall through...
 	case TT_OUTPUT_MODE_VERBOSE:
-        q_newline();
         tt_printf(TT_PSTR("------------------------------------------------\n"));
         tt_printf(TT_PSTR("Passed %d, failed %d, ignored %d.\n"),
           f_ctx.pass_count,
           f_ctx.fail_count,
           f_ctx.ignore_count);
         tt_printf((f_ctx.fail_count > 0) ? TT_PSTR("FAIL") : TT_PSTR("OK"));
-        newline();
+        tt_printf(TT_PSTR(TT_NEWLINE));
 		break;
     }
     return f_ctx.fail_count > 0;
@@ -329,7 +315,7 @@ int ttMain(int argc, char* argv[]) {
 	if (help) {
         tt_printf(TT_PSTR(
 		  "Tinytest test harness %s [options]. Return value is number of failures.\n"
-		  " Default is to print full information for failures only, with totals"
+		  " Default is to print full information for failures only, with totals.\n"
 		  "  -?  print help\n"
 		  "  -q  quiet, no output at all\n"
 		  "  -c  concise output `FI.' for fail/ignored/pass, with totals\n"

@@ -59,15 +59,15 @@ void ttRunTests(void) {
 	TT_TEST_SIMPLE(testAssertFail);
 	TT_TEST_SIMPLE(testIgnore);
 	TT_TEST_SIMPLE(testFailExplicit);
-	ttSetDump(dumper);
+	ttRegisterFixture(NULL, dumper, NULL);
 	TT_TEST_SIMPLE(testDump);
-	ttSetDump(NULL);
+	ttUnregisterFixture();
 	
-	ttRegisterFixture(setup, teardown);
+	ttRegisterFixture(setup, NULL, teardown);
 		TT_TEST_SIMPLE(testFixtureOk);
 		TT_TEST_SIMPLE(testFixtureFail);
 		TT_TEST_SIMPLE(testFixtureIgnore);
-	ttRegisterFixture(NULL, NULL);
+	ttUnregisterFixture();
 
 	TT_TEST_SIMPLE(testAssertEqOk);
 	TT_TEST_SIMPLE(testAssertIntFail1);
